@@ -1,0 +1,122 @@
+﻿@page
+@model SignalRLab3.Pages.Admin.IndexModel
+
+@{
+    ViewData["Title"] = "Admin - Manage Users and Groups";
+}
+
+<h2>Admin - Manage Users and Groups</h2>
+
+<!-- Tabs for Users and Groups -->
+<ul class="nav nav-tabs" id="adminTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(Model.Tab == "user" ? "active" : "")" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">Users</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(Model.Tab == "group" ? "active" : "")" data-bs-toggle="tab" data-bs-target="#groups" type="button" role="tab">Groups</button>
+    </li>
+</ul>
+
+<div class="tab-content mt-3">
+    <!-- Users Tab -->
+    <div class="tab-pane @(Model.Tab == "user" ? "show active" : "")" id="users" role="tabpanel">
+        <h3>Users</h3>
+
+        <!-- Create New User Form -->
+        <form method="post" asp-page-handler="createUser">
+            <div class="mb-3">
+                <label for="userName" class="form-label">Name</label>
+                <input type="text" id="userName" name="user.FullName" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="userPassword" class="form-label">Password</label>
+                <input type="password" id="userPassword" name="user.Password" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="userEmail" class="form-label">Email</label>
+                <input type="email" id="userPassword" name="user.Email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="userGroup" class="form-label">Assign to Group</label>
+                <select required id="userGroup" name="user.GroupId" class="form-select">
+                    @{
+                        if (Model.Groups.Count == 0)
+                        {
+                            <option value="">None</option>
+                        }
+                        else
+                        {
+                            @foreach (var group in Model.Groups)
+                            {
+                                <option value="@group.Id">@group.Name</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
+
+        <!-- Users Table -->
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>FullName</th>
+                    <th>Email</th>
+                    <th>Group</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>@user.Group.Name</td>
+                        <td>
+                            <a asp-page-handler="EditUser" asp-route-id="@user.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-page-handler="DeleteUser" asp-route-id="@user.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Groups Tab -->
+    <div class="tab-pane @(Model.Tab == "group" ? "show active" : "")" id="groups" role="tabpanel">
+        <h3>Groups</h3>
+
+        <!-- Create New Group Form -->
+        <form method="post" asp-page-handler="createGroup">
+            <div class="mb-3">
+                <label for="groupName" class="form-label">Group Name</label>
+                <input type="text" id="groupName" name="gr.Name" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Group</button>
+        </form>
+
+        <!-- Groups Table -->
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Group Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var group in Model.Groups)
+                {
+                    <tr>
+                        <td>@group.Name</td>
+                        <td>
+                            <a asp-page-handler="EditGroup" asp-route-id="@group.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-page-handler="DeleteGroup" asp-route-id="@group.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
