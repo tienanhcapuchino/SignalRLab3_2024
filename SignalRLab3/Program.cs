@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SignalRLab3;
 using SignalRLab3.DataAccess;
+using SignalRLab3.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
+builder.Services.AddTransient<IDataBuilderService, DataBuilderService>();
 
 var app = builder.Build();
 
@@ -40,5 +42,14 @@ app.UseSession();
 
 app.MapRazorPages();
 app.MapHub<ChatHub>("/chathub");
+
+//seed data
+
+var scope = app.Services.CreateScope();
+var dataBuilderService = scope.ServiceProvider.GetRequiredService<IDataBuilderService>();
+if (dataBuilderService != null)
+{
+    dataBuilderService.InitData().GetAwaiter().GetResult();
+}
 
 app.Run();
