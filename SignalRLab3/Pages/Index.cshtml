@@ -8,8 +8,54 @@
     var user = HttpContextAccessor.HttpContext.Session.GetString("user");
 }
 
-
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+@{
+    if (!string.IsNullOrEmpty(user))
+    {
+        <div>
+            <div>
+                <div style="width:50%; float:left;">
+                    <h2>Broadcast message</h2>
+                    <div>
+                        <div>
+                            Message
+                        </div>
+                        <input type="text" id="broadcastmessage" />
+                    </div>
+                    <div>
+                        <input type="button" id="broadcastButton" value="Send Message to all" />
+                    </div>
+                </div>
+
+                <div style="width:50%; float:left;">
+                    <h2>Send To Group</h2>
+                    <div>
+                        <div>Send Group</div>
+                        <input type="text" id="userInput" />
+                    </div>
+                    <div>
+                        <div>
+                            Message
+                        </div>
+                        <input type="text" id="messageInput" />
+                    </div>
+                    <div>
+                        <input type="button" id="sendButton" value="Send Message" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul id="messageList">
+                </ul>
+            </div>
+        </div>
+    }
+}
+
+<script src="~/lib/microsoft-signalr/signalr.js"></script>
+<script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+<script src="~/js/site.js"></script>

@@ -32,6 +32,7 @@ namespace SignalRLab3.Pages.Admin
             if (user != null && PasswordHelper.Decrypt(user.Password) == model.Password)
             {
                 _contextAccessor.HttpContext.Session.SetString("user", user.Email);
+                _contextAccessor.HttpContext.Session.SetString("userId", user.Id.ToString());
                 return RedirectToPage("../Index");
             }
             return Page();

@@ -44,7 +44,6 @@ app.MapRazorPages();
 app.MapHub<ChatHub>("/chathub");
 
 //seed data
-
 var scope = app.Services.CreateScope();
 var dataBuilderService = scope.ServiceProvider.GetRequiredService<IDataBuilderService>();
 if (dataBuilderService != null)
